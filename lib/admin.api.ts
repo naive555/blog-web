@@ -33,6 +33,15 @@ export function getAdminBlogs(
   return apiFetch<PaginatedResponse<Blog>>(`/blog${qs}`, { token });
 }
 
+export interface CreateBlogPayload {
+  title: string;
+  content: string;
+}
+
+export function createBlog(token: string, payload: CreateBlogPayload): Promise<Blog> {
+  return apiFetch<Blog>('/blog', { method: 'POST', token, body: payload });
+}
+
 export interface UpdateBlogPayload {
   title?: string;
   content?: string;

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import Link from 'next/link';
 
 export default function AdminLoginPage() {
   const { login } = useAdminAuth();
@@ -73,6 +74,12 @@ export default function AdminLoginPage() {
           className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium rounded-md transition">
           {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
         </button>
+
+        <Link
+          href="/"
+          className="block text-center text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition">
+          กลับหน้าหลัก
+        </Link>
       </form>
     </div>
   );

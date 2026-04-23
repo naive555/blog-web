@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { submitComment } from '@/lib/comment.api';
 
-// Allows Thai characters (ก-ฮ), Arabic digits, and spaces.
-const THAI_AND_NUMBERS = /^[ก-ฮ0-9\s]+$/;
+// Allows Thai characters, Arabic digits, and spaces.
+const THAI_AND_NUMBERS = /^[\u0E00-\u0E7F0-9\s]+$/;
 
 interface CommentFormProps {
   blogId: string;
@@ -32,7 +32,7 @@ export function CommentForm({ blogId }: CommentFormProps) {
     return errs;
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {

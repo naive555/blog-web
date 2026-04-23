@@ -11,9 +11,11 @@ type FetchOptions = {
 export async function apiFetch<T>(path: string, options: FetchOptions = {}): Promise<T> {
   const { method = 'GET', body, token, cache, next } = options;
 
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
+  const headers: Record<string, string> = {};
+
+  if (body !== undefined) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
