@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { getBlog } from '@/lib/blog.api';
 import type { Blog } from '@/lib/types';
 
 interface BlogListItemProps {
@@ -16,14 +17,21 @@ export function BlogListItem({
   onEditStart,
 }: BlogListItemProps) {
   const [editing, setEditing] = useState(false);
+  const [fetchingEdit, setFetchingEdit] = useState(false);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
 
-  function startEdit() {
-    setEditTitle(blog.title);
-    setEditContent(blog.content ?? '');
-    setEditing(true);
+  async function startEdit() {
     onEditStart();
+    setFetchingEdit(true);
+    try {
+      const full = await getBlog(blog.slug);
+      setEditTitle(full.title);
+      setEditContent(full.content ?? '');
+      setEditing(true);
+    } finally {
+      setFetchingEdit(false);
+    }
   }
 
   async function handleSave() {
@@ -43,7 +51,7 @@ export function BlogListItem({
           <textarea
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
-            rows={6}
+            rows={8}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <div className="flex gap-2">
@@ -78,9 +86,10 @@ export function BlogListItem({
             </span>
             <button
               onClick={startEdit}
-              className="text-sm px-3 py-1.5 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+              disabled={fetchingEdit}
+              className="text-sm px-3 py-1.5 border border-gray-300 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 transition"
             >
-              แก้ไข
+              {fetchingEdit ? 'กำลังโหลด...' : 'แก้ไข'}
             </button>
             <button
               onClick={() => onToggleStatus(blog)}

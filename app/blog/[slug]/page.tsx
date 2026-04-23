@@ -4,7 +4,7 @@ import { BlogImages } from '@/components/BlogImages';
 import { CommentList } from '@/components/CommentList';
 import { CommentForm } from '@/components/CommentForm';
 import type { Metadata } from 'next';
-import { BlogImage } from '@/lib/types';
+import { Blog, BlogImage } from '@/lib/types';
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -25,7 +25,7 @@ export async function generateMetadata({
 export default async function BlogDetailPage({ params }: PageProps) {
   const { slug } = await params;
 
-  let blog;
+  let blog: Blog;
   try {
     blog = await getBlog(slug);
   } catch {
