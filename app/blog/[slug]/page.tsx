@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getBlog, getBlogImages } from '@/lib/blog.api';
 import { BlogImages } from '@/components/BlogImages';
@@ -5,6 +6,7 @@ import { CommentList } from '@/components/CommentList';
 import { CommentForm } from '@/components/CommentForm';
 import type { Metadata } from 'next';
 import { Blog, BlogImage } from '@/lib/types';
+import { ArrowLeft } from 'lucide-react';
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -47,6 +49,12 @@ export default async function BlogDetailPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto px-4 py-10 max-w-3xl">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 mb-6 transition">
+        <ArrowLeft size={16} />
+      </Link>
+
       <BlogImages images={images} title={blog.title} />
 
       <h1 className="text-3xl font-bold mt-8 mb-3">{blog.title}</h1>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { getAdminBlogs, createBlog, updateBlog } from '@/lib/admin.api';
+import { getAdminBlogs, createBlog, updateBlog, deleteBlog } from '@/lib/admin.api';
 import { CreateBlogForm } from '@/components/admin/CreateBlogForm';
 import { BlogListItem } from '@/components/admin/BlogListItem';
 import type { Blog } from '@/lib/types';
@@ -16,15 +16,23 @@ export default function AdminBlogsPage() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState('');
   const [showCreate, setShowCreate] = useState(false);
 
   const fetchBlogs = useCallback(async () => {
     if (!token) return;
     setLoading(true);
+    setFetchError('');
     try {
       const result = await getAdminBlogs(token, { page, limit: PAGE_SIZE, search });
       setBlogs(result.data);
       setTotal(result.total);
+    } catch (err) {
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message: string }).message)
+          : 'โหลดบทความไม่สำเร็จ';
+      setFetchError(message);
     } finally {
       setLoading(false);
     }
@@ -47,9 +55,16 @@ export default function AdminBlogsPage() {
     fetchBlogs();
   }
 
-  async function handleSaveEdit(blog: Blog, title: string, content: string) {
+  async function handleSaveEdit(blog: Blog, title: string, slug: string, content: string) {
     if (!token) return;
-    await updateBlog(token, blog.id, { title, content });
+    await updateBlog(token, blog.id, { title, slug, content });
+    fetchBlogs();
+  }
+
+  async function handleDelete(blog: Blog) {
+    if (!token) return;
+    if (!confirm(`ต้องการลบบทความ "${blog.title}" ใช่หรือไม่?`)) return;
+    await deleteBlog(token, blog.id);
     fetchBlogs();
   }
 
@@ -85,6 +100,12 @@ export default function AdminBlogsPage() {
         className="w-full mb-6 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
       />
 
+      {fetchError && (
+        <p className="text-sm text-red-600 bg-red-50 dark:bg-red-950 px-3 py-2 rounded-md mb-4">
+          {fetchError}
+        </p>
+      )}
+
       {loading ? (
         <p className="text-sm text-gray-500">กำลังโหลด...</p>
       ) : (
@@ -95,6 +116,7 @@ export default function AdminBlogsPage() {
               blog={blog}
               onToggleStatus={handleToggleStatus}
               onSaveEdit={handleSaveEdit}
+              onDelete={handleDelete}
               onEditStart={() => setShowCreate(false)}
             />
           ))}

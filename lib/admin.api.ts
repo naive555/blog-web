@@ -44,6 +44,7 @@ export function createBlog(token: string, payload: CreateBlogPayload): Promise<B
 
 export interface UpdateBlogPayload {
   title?: string;
+  slug?: string;
   content?: string;
   status?: 1 | 0 | -1;
 }
@@ -69,6 +70,10 @@ export function getComments(
 
 export function approveComment(token: string, id: string): Promise<void> {
   return apiFetch<void>(`/comment/${id}/approve`, { method: 'PATCH', token });
+}
+
+export function deleteBlog(token: string, id: string): Promise<void> {
+  return apiFetch<void>(`/blog/${id}`, { method: 'DELETE', token });
 }
 
 export function rejectComment(token: string, id: string): Promise<void> {
