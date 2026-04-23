@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm -rf app/api app/game app/leaderboard app/profile)",
+      "Bash(rm -f lib/auth0.ts lib/auth0.spec.ts lib/game.api.ts lib/game.api.spec.ts lib/api.spec.ts)",
+      "Bash(rm -f components/GameBoard.tsx components/GameBoard.spec.tsx components/LeaderboardTable.tsx components/LeaderboardTable.spec.tsx components/LoginButton.tsx components/LogoutButton.tsx components/Profile.tsx components/Profile.spec.tsx components/ScoreCard.tsx components/ScoreCard.spec.tsx components/ScorePanel.tsx components/ScorePanel.spec.tsx components/Navbar.spec.tsx)",
+      "Bash(bun remove *)"
+    ]
+  }
+}
