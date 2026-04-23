@@ -34,8 +34,6 @@ export default async function BlogDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // NOTE: The image endpoint may require auth (see docs/api-integration.md).
-  // If it does, images will be silently omitted on this public page.
   let images: BlogImage[] = [];
   try {
     images = await getBlogImages(blog.id);

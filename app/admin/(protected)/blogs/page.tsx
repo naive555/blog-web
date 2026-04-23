@@ -42,11 +42,9 @@ export default function AdminBlogsPage() {
     fetchBlogs();
   }, [fetchBlogs]);
 
-  async function handleCreate(title: string, content: string) {
-    if (!token) return;
-    await createBlog(token, { title, content });
-    setShowCreate(false);
-    fetchBlogs();
+  async function handleCreate(title: string, content: string): Promise<Blog> {
+    if (!token) throw new Error('Not authenticated');
+    return createBlog(token, { title, content });
   }
 
   async function handleToggleStatus(blog: Blog) {
@@ -87,7 +85,9 @@ export default function AdminBlogsPage() {
 
       {showCreate && (
         <CreateBlogForm
+          token={token!}
           onCreate={handleCreate}
+          onCreated={() => { setShowCreate(false); fetchBlogs(); }}
           onCancel={() => setShowCreate(false)}
         />
       )}
@@ -114,6 +114,7 @@ export default function AdminBlogsPage() {
             <BlogListItem
               key={blog.id}
               blog={blog}
+              token={token!}
               onToggleStatus={handleToggleStatus}
               onSaveEdit={handleSaveEdit}
               onDelete={handleDelete}

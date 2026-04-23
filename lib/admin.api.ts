@@ -1,5 +1,5 @@
 import { apiFetch } from './api';
-import type { Blog, Comment, PaginatedResponse, CommentStatus } from './types';
+import type { Blog, BlogImage, Comment, PaginatedResponse, CommentStatus } from './types';
 
 export function adminLogin(payload: {
   username: string;
@@ -74,6 +74,22 @@ export function approveComment(token: string, id: string): Promise<void> {
 
 export function deleteBlog(token: string, id: string): Promise<void> {
   return apiFetch<void>(`/blog/${id}`, { method: 'DELETE', token });
+}
+
+export function addBlogImage(
+  token: string,
+  blogId: string,
+  payload: { url: string; isCover: boolean },
+): Promise<BlogImage> {
+  return apiFetch<BlogImage>(`/blog/${blogId}/image`, {
+    method: 'POST',
+    token,
+    body: payload,
+  });
+}
+
+export function deleteBlogImage(token: string, imageId: string): Promise<void> {
+  return apiFetch<void>(`/blog-image/${imageId}`, { method: 'DELETE', token });
 }
 
 export function rejectComment(token: string, id: string): Promise<void> {

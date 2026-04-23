@@ -24,18 +24,12 @@ export function getBlog(slug: string): Promise<Blog> {
   return apiFetch<Blog>(`/blog/${slug}`, { cache: 'no-store' });
 }
 
-// NOTE: The backend docs list this under "Auth Required", but the frontend requires it
-// for public blog detail pages. If the backend enforces auth, this will gracefully fail.
-export function getBlogImages(
-  blogId: string,
-  token?: string,
-): Promise<BlogImage[]> {
-  return apiFetch<BlogImage[]>(`/blog/${blogId}/image`, { token });
+export function getBlogImages(blogId: string): Promise<BlogImage[]> {
+  return apiFetch<BlogImage[]>(`/blog/${blogId}/image`);
 }
 
 // Fetches blog list and resolves cover image for each blog in parallel.
 // Results in N+1 requests (one per blog); acceptable for page size of 10.
-// If the image endpoint enforces auth, cover images will be silently omitted.
 export async function getBlogsWithCover(
   params: BlogListParams = {},
 ): Promise<{ data: BlogWithCover[]; total: number }> {
