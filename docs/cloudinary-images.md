@@ -100,13 +100,10 @@ If the blog is created but image upload fails, the blog still exists - the user 
 ## Edit flow (BlogListItem)
 
 ```typescript
-// On edit open: load full blog + existing images
-const [full, imgs] = await Promise.all([
-  getBlog(blog.slug),
-  getBlogImages(blog.id),
-]);
+// On edit open: load full blog (images are embedded in the response)
+const full = await getBlog(blog.slug);
 setImages(
-  imgs.map((img) => ({
+  full.images.map((img) => ({
     existingId: img.id,
     preview: img.url,
     isCover: img.isCover,

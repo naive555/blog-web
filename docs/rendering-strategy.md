@@ -19,7 +19,7 @@ Pages rendered on the server per request. Data fetched inside `async` Server Com
 ```tsx
 // app/page.tsx — data fetched at request time
 export default async function BlogListPage({ searchParams }: PageProps) {
-  const { data: blogs, total } = await getBlogsWithCover({ search, page });
+  const { data: blogs, total } = await getBlogs({ search, page, limit: PAGE_SIZE });
   return <BlogCard blog={...} />;
 }
 ```
