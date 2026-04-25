@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getBlog, getBlogImages } from '@/lib/blog.api';
+import { getBlog } from '@/lib/blog.api';
 import { BlogImages } from '@/components/BlogImages';
 import { CommentList } from '@/components/CommentList';
 import { CommentForm } from '@/components/CommentForm';
 import type { Metadata } from 'next';
-import { Blog, BlogImage } from '@/lib/types';
+import { Blog } from '@/lib/types';
 import { ArrowLeft } from 'lucide-react';
 
 type PageProps = {
@@ -34,13 +34,6 @@ export default async function BlogDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  let images: BlogImage[] = [];
-  try {
-    images = await getBlogImages(blog.id);
-  } catch {
-    // graceful degradation
-  }
-
   const approvedComments = (blog.comments ?? []).filter(
     (c) => c.status === 'approved',
   );
@@ -53,7 +46,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
         <ArrowLeft size={16} />
       </Link>
 
-      <BlogImages images={images} title={blog.title} />
+      <BlogImages images={blog.images} title={blog.title} />
 
       <h1 className="text-3xl font-bold mt-8 mb-3">{blog.title}</h1>
 

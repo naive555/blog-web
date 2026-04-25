@@ -6,6 +6,7 @@ export interface Blog {
   title: string;
   slug: string;
   content?: string;
+  images: BlogImage[];
   viewCount: number;
   status: BlogStatus;
   authorId: string;

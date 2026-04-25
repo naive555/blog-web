@@ -1,20 +1,22 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import type { BlogWithCover } from '@/lib/blog.api';
+import type { Blog } from '@/lib/types';
 
 interface BlogCardProps {
-  blog: BlogWithCover;
+  blog: Blog;
 }
 
 export function BlogCard({ blog }: BlogCardProps) {
+  const coverImage = blog.images.find((img) => img.isCover)?.url ?? null;
+
   return (
     <Link
       href={`/blog/${blog.slug}`}
       className="flex gap-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-md transition-shadow">
-      {blog.coverImage && (
+      {coverImage && (
         <div className="relative w-40 shrink-0">
           <Image
-            src={blog.coverImage}
+            src={coverImage}
             alt={blog.title}
             fill
             className="object-cover"

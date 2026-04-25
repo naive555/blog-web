@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { getBlog, getBlogImages } from '@/lib/blog.api';
+import { getBlog } from '@/lib/blog.api';
 import { addBlogImage, deleteBlogImage } from '@/lib/admin.api';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { ImageUploader, type ImageEntry } from './ImageUploader';
@@ -43,15 +43,12 @@ export function BlogListItem({
     setError('');
     setFetchingEdit(true);
     try {
-      const [full, imgs] = await Promise.all([
-        getBlog(blog.slug),
-        getBlogImages(blog.id),
-      ]);
+      const full = await getBlog(blog.slug);
       setEditTitle(full.title);
       setEditSlug(full.slug);
       setEditContent(full.content ?? '');
       setImages(
-        imgs.map(img => ({
+        full.images.map(img => ({
           existingId: img.id,
           preview: img.url,
           isCover: img.isCover,

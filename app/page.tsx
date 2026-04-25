@@ -1,4 +1,4 @@
-import { getBlogsWithCover } from '@/lib/blog.api';
+import { getBlogs } from '@/lib/blog.api';
 import { BlogCard } from '@/components/BlogCard';
 import { Pagination } from '@/components/Pagination';
 import { SearchBar } from '@/components/SearchBar';
@@ -13,7 +13,7 @@ export default async function BlogListPage({ searchParams }: PageProps) {
   const { search = '', page: pageStr = '1' } = await searchParams;
   const page = Math.max(1, Number(pageStr) || 1);
 
-  const { data: blogs, total } = await getBlogsWithCover({ search, page, limit: PAGE_SIZE });
+  const { data: blogs, total } = await getBlogs({ search, page, limit: PAGE_SIZE });
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
